@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1828" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>CrewBrief · Hotel Departure</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <div class="logo">✈</div>
+      <div><div class="eyebrow">CREW OPERATIONS</div><h1>CrewBrief</h1><p class="sub">Hotel Departure & Wakeup Call</p></div>
+      <span class="v">V0.1</span>
+    </header>
+
+    <section class="intro"><h2>Dois documentos. Dois horários.</h2><p>Adiciona uma fotografia do Flight Report e o PDF da escala. Confirma o que foi reconhecido e obtém os horários em hora local — sem margens adicionais.</p></section>
+
+    <div class="two">
+      <section class="panel"><div class="sectionhead"><span class="step">1</span><div><h2>Flight Report</h2><p>Fotografia ou imagem</p></div></div>
+        <label class="upload" for="reportFile"><span class="uploadicon">▧</span><strong>Fotografar ou escolher imagem</strong><span>JPG · PNG · HEIC, quando suportado</span></label>
+        <input id="reportFile" type="file" accept="image/*" capture="environment" />
+        <div id="reportMeta" class="filemeta" aria-live="polite"></div>
+        <img id="reportPreview" class="preview hidden" alt="Pré-visualização do Flight Report" />
+        <button id="readReport" class="btn secondary" disabled>Reconhecer texto da fotografia</button>
+        <p class="micro">O reconhecimento da fotografia pode falhar; confirma sempre o aeroporto, a data e a STD.</p>
+      </section>
+      <section class="panel"><div class="sectionhead"><span class="step">2</span><div><h2>Informação da escala</h2><p>Documento PDF</p></div></div>
+        <label class="upload" for="pdfFile"><span class="uploadicon">▤</span><strong>Importar PDF da escala</strong><span>O ficheiro fica no teu dispositivo</span></label>
+        <input id="pdfFile" type="file" accept="application/pdf,.pdf" />
+        <div id="pdfMeta" class="filemeta" aria-live="polite"></div>
+        <button id="readPdf" class="btn secondary" disabled>Ler regras do PDF</button>
+        <div id="pdfExtract" class="micro" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <section class="panel"><div class="sectionhead"><span class="step">3</span><div><h2>Confirmar os dados</h2><p>É obrigatória a validação antes de calcular</p></div></div>
+      <div class="formgrid">
+        <label>Destino / código IATA <input id="airport" type="text" maxlength="4" placeholder="Ex.: YYZ" autocomplete="off" spellcheck="false" /></label>
+        <label>Fuso horário do destino <select id="timezone"><option value="">Selecionar aeroporto</option></select></label>
+        <label>Data de partida (local) <input id="departureDate" type="date" /></label>
+        <label>STD do voo (hora local) <input id="std" type="time" /></label>
+      </div>
+      <div class="rulebox"><div class="ruleheading"><h3>Regra de saída do hotel</h3><span id="ruleSource" class="tag">Por confirmar</span></div>
+      <p class="micro">Seleciona a regra que consta do PDF. A aplicação sugere valores, mas nunca acrescenta margens.</p>
+      <div id="ruleCandidates" class="choices"></div>
+      <div class="ruleedit"><label>Minutos antes da STD <input id="offsetMins" type="number" min="0" max="1440" step="1" placeholder="Ex.: 170" /></label><label class="checklabel"><input type="checkbox" id="verified" /> Confirmei esta regra no PDF</label></div>
+      <p id="ruleNote" class="micro"></p></div>
+      <details class="details"><summary>Ver texto reconhecido</summary><h3>Flight Report (OCR)</h3><pre id="ocrText">Sem fotografia processada.</pre><h3>PDF da escala</h3><pre id="pdfText">Sem PDF processado.</pre></details>
+      <div id="notice" class="notice hidden" role="status"></div>
+      <button id="calculate" class="btn mainbtn">Calcular horários</button>
+    </section>
+
+    <section id="result" class="panel result hidden" aria-live="polite"><div class="sectionhead"><span class="step ok">✓</span><div><h2>Horários calculados</h2><p id="resultInfo"></p></div></div>
+      <div class="twotimes"><div class="timecard"><span>HOTEL DEPARTURE</span><strong id="departureResult">—</strong><small id="departureDay"></small></div><div class="timecard"><span>WAKEUP CALL</span><strong id="wakeupResult">—</strong><small id="wakeupDay"></small></div></div>
+      <p id="resultRule" class="micro"></p><button id="copy" class="btn secondary">Copiar resumo</button>
+    </section>
+
+    <section class="panel"><div class="sectionhead"><span class="step">4</span><div><h2>Biblioteca neste dispositivo</h2><p>Documentos guardados localmente para consulta posterior</p></div></div>
+      <div id="library" class="library"><p class="micro">Sem documentos guardados.</p></div>
+      <p class="micro">Os PDF são guardados no armazenamento local do navegador. Podes perder esta biblioteca ao limpar dados do Safari, mudar de dispositivo ou utilizar navegação privada.</p>
+    </section>
+    <footer>Ferramenta auxiliar, não oficial. Confirma sempre os horários, documentos e instruções em vigor. Nenhum ficheiro é enviado para servidores da CrewBrief.</footer>
+  </main>
+  <script src="./app.js" defer></script>
+</body>
+</html>
